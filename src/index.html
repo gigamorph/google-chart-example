@@ -1,0 +1,391 @@
+<!-- 
+11/27/2009 Seong-June Kim
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>A Google Chart Interactive Example</title>
+  
+    <script type="text/javascript" src="../lib/jquery/jquery-1.3.2.js"></script>
+    <script type="text/javascript" src="../lib/jquery/jquery.json-2.2.js"></script>
+    <script type="text/javascript" src="../lib/jquery/jquery-ui-1.7.2.custom.min.js"></script>
+    <script type="text/javascript" src="../lib/jquery/jquery.url.packed.js"></script>
+   
+    <script type="text/javascript" src="defs.js"></script> 
+    <script type="text/javascript" src="util.js"></script>
+    
+    <script type="text/javascript" src="chart-type/base-chart.js"></script>
+    <script type="text/javascript" src="chart-type/base-bar-chart.js"></script>
+    <script type="text/javascript" src="chart-type/base-line-chart.js"></script>
+    <script type="text/javascript" src="chart-type/base-pie-chart.js"></script>
+    
+    <script type="text/javascript" src="chart-type/h-grouped-bars.js"></script>
+    <script type="text/javascript" src="chart-type/h-stacked-bars.js"></script>
+    <script type="text/javascript" src="chart-type/line-chart.js"></script>
+    <script type="text/javascript" src="chart-type/pie-3d.js"></script>
+    <script type="text/javascript" src="chart-type/pie-chart.js"></script>
+    <script type="text/javascript" src="chart-type/pie-concentric.js"></script>
+    <script type="text/javascript" src="chart-type/scatter-plot.js"></script>
+    <script type="text/javascript" src="chart-type/spark-lines.js"></script>
+    <script type="text/javascript" src="chart-type/v-grouped-bars.js"></script>
+    <script type="text/javascript" src="chart-type/v-stacked-bars.js"></script>
+    <script type="text/javascript" src="chart-type/xy-lines.js"></script>
+    
+    <script type="text/javascript" src="parameter/base-param-area.js"></script>
+    <script type="text/javascript" src="parameter/base-optional-param-area.js"></script>
+    
+    <script type="text/javascript" src="parameter/bar-width-spacing-area.js"></script>
+    <script type="text/javascript" src="parameter/axis-label-area.js"></script>
+    <script type="text/javascript" src="parameter/axis-label-styles-area.js"></script>
+    <script type="text/javascript" src="parameter/axis-range-area.js"></script>
+    <script type="text/javascript" src="parameter/axis-tick-mark-styles-area.js"></script>
+    <script type="text/javascript" src="parameter/background-fills-area.js"></script>
+    <script type="text/javascript" src="parameter/color-area.js"></script>
+    <script type="text/javascript" src="parameter/data-area.js"></script>
+    <script type="text/javascript" src="parameter/data-scale-area.js"></script>
+    <script type="text/javascript" src="parameter/dynamic-icon-markers-area.js"></script>
+    <script type="text/javascript" src="parameter/gradient-fills-area.js"></script>    
+    <script type="text/javascript" src="parameter/grid-lines-area.js"></script>
+    <script type="text/javascript" src="parameter/legend-area.js"></script>
+    <script type="text/javascript" src="parameter/legend-position-area.js"></script>
+    <script type="text/javascript" src="parameter/line-style-area.js"></script>
+    <script type="text/javascript" src="parameter/margin-area.js"></script>
+    <script type="text/javascript" src="parameter/pie-orientation-area.js"></script>
+    <script type="text/javascript" src="parameter/size-area.js"></script>
+    <script type="text/javascript" src="parameter/solid-fills-area.js"></script>
+    <script type="text/javascript" src="parameter/striped-fills-area.js"></script>
+    <script type="text/javascript" src="parameter/title-area.js"></script>
+    <script type="text/javascript" src="parameter/title-style-area.js"></script>
+    <script type="text/javascript" src="parameter/type-area.js"></script>
+    <script type="text/javascript" src="parameter/visible-axes-area.js"></script>
+    <script type="text/javascript" src="google-chart-example.js"></script>
+    <script type="text/javascript" src="params.js"></script>
+    <script type="text/javascript" src="table.js"></script>
+    <script type="text/javascript" src="text-row.js"></script>
+
+    <link href="my.css" rel="stylesheet" type="text/css"/>
+    <link href="jquery/ui-lightness/jquery-ui-1.7.2.custom.css" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <h2>Chart</h2>
+    <div id="chart_area">
+      <img id="chart_img"/>
+      <iframe id="validate_area" width="600" height="280"></iframe>
+    </div>
+    <p>
+      URL: <span id="url_area"></span>
+    </p>
+
+    <button id="update_button">Update chart</button>
+    <button id="validate_button">Validate</button>
+    
+    <h2>Required Parameters</h2>
+    <p>
+      <span id="type_area">
+        <b>Type (cht)</b>
+        <select id="type_selector">
+          <option value="lc" selected="selected">Line chart (lc)</option>
+          <option value="ls">Sparklines (ls)</option>
+          <option value="lxy">XY line (lxy)</option>
+          <option value="bhs">Horizontal bar chart with stacked bars (bhs)</option>
+          <option value="bvs">Vertical bar chart with stacked bars (bvs)</option>
+          <option value="bhg">Horizontal bar chart with grouped bars (bhg)</option>
+          <option value="bvg">Vertical bar chart with grouped bars (bvg)</option>
+          <option value="s">Scatter plot (s)</option>
+          <option value="p">2D pie chart (p)</option>
+          <option value="p3">3D pie chart (p3)</option>
+          <option value="pc">Concentric pie charts (pc)</option>
+        </select>
+      </span>
+      <span id="size_area">
+        <b>Size (chs)</b> 
+        <input id="width" size="4" value="300"></input> x
+        <input id="height" size="4" value="200"></input>
+      </span>
+    </p>
+    <p id="data_area">
+      <b>Data (chd)</b><br/>
+      Data Format:
+      <select id="data_encoding_selector">
+        <option value="text" selected="selected">Basic text format (0-100)</option>
+        <option value="text_scale">Text format with custom scaling</option>
+        <option value="simple_encoding">Simple encoding format (A-Za-z0-9_)</option>
+        <option value="extended_encoding">Extended encoding format</option>
+      </select>
+      <!--<div id="data_row">-->
+      <table id="data_table"></table>
+      </div>
+      <button id="add_data_button">Add Column</button>
+      <button id="remove_data_button">Remove Last Column</button>
+      <button id="add_data_set_button">Add Row</button>
+      <button id="remove_data_set_button">Remove Last Row</button>
+    </p>
+    <div id="data_scale_area">
+      <b>Data Scaling (chds)</b><br/>
+      <table>
+        <tr>
+          <td>Min:</td>
+          <td><table id="data_scale_min_table"></table></td>
+        </tr>
+        <tr>
+          <td>Max:</td>
+          <td><table id="data_scale_max_table"></table></td>
+        </tr> 
+      </table>
+      <button id="add_data_scale_column_button">Add data scale column</button>
+      <button id="remove_data_scale_column_button">Remove last column</button>
+    </div>
+
+    <h2>Optional parameters</h2>
+
+    <p id="color_area">
+      <b>Colors (chco)</b>
+      <button id="color_enable_button">Enable</button>
+      <br/>
+      <table id="color_area_table"></table>
+      <button id="add_color_button" class="color_enable_target">Add Column</button>
+      <button id="remove_color_button" class="color_enable_target">Remove Last Column</button>
+      <button id="add_color_set_button" class="color_enable_target">Add Row</button>
+      <button id="remove_color_set_button" class="color_enable_target">Remove Last Row</button>
+    </p>
+
+    <p id="line_style_area">
+      <b>Line Styles (chls)</b>
+      <button id="line_style_enable_button">Enable</button>
+      <br/>
+      <table id="line_style_table"></table>
+      <button id="add_line_style_button" class="line_style_enable_target">
+        Add Line</button>
+      <button id="remove_line_style_button" class="line_style_enable_target">
+        Remove Last Line</button>
+    </p>
+
+    <p id="visible_axes_area">
+      <b>Visible Axes (chxt)</b>
+      <button id="visible_axes_enable_button">Enable</button>
+      <br/>
+      <table id="visible_axes_table"></table>
+      <button id="add_visible_axes_button" class="visible_axes_enable_target">
+        Add Axis</button>
+      <button id="remove_visible_axes_button" class="visible_axes_enable_target">
+        Remove Last Axis</button>
+    </p>
+    
+    <p id="axis_range_area">
+      <b>Axis Ranges (chxr)</b>
+      <button id="axis_range_enable_button">Enable</button>
+      <br/>
+      <table id="axis_range_table"></table>
+      <button id="add_axis_range_button" class="axis_range_enable_target">
+        Add Axis</button>
+      <button id="remove_axis_range_button" class="axis_range_enable_target">
+        Remove Last Axis</button>
+    </p>
+    
+    <p id="axis_label_area">
+      <b>Axis Labels (chxl)</b>
+      <button id="axis_label_enable_button">Enable</button>
+      <small>
+        <i>
+          Empty cells for labels are silently ignored.
+        </i>
+      </small>
+      <br/>
+      <table id="axis_label_table"></table>
+      <button id="add_axis_label_column_button" class="axis_label_enable_target">
+        Add Column</button>
+      <button id="remove_axis_label_column_button" class="axis_label_enable_target">
+        Remove Last Column</button>
+      <button id="add_axis_label_row_button" class="axis_label_enable_target">
+        Add Row</button>
+      <button id="remove_axis_label_row_button" class="axis_label_enable_target">
+        Remove Last Row</button>
+    </p>
+    
+    <p id="axis_label_styles_area">
+      <b>Axis Label Styles (chxs)</b>
+      <button id="axis_label_styles_enable_button">Enable</button>
+      <br/>
+      <table id="axis_label_styles_table"></table>
+      <button id="add_axis_label_styles_button" class="axis_label_styles_enable_target">
+        Add Axis</button>
+      <button id="remove_axis_label_styles_button" class="axis_label_styles_enable_target">
+        Remove Last Axis</button>
+    </p>
+    
+    <p id="axis_tick_mark_styles_area">
+      <b>Axis Tick Mark Styles (chxtc)</b>
+      <button id="axis_tick_mark_styles_enable_button">Enable</button>
+      <br/>
+      <table id="axis_tick_mark_styles_table"></table>
+      <button id="add_axis_tick_mark_styles_column_button" class="axis_tick_mark_styles_enable_target">
+        Add Column</button>
+      <button id="remove_axis_tick_mark_styles_column_button" class="axis_tick_mark_styles_enable_target">
+        Remove Last Column</button>
+      <button id="add_axis_tick_mark_styles_row_button" class="axis_tick_mark_styles_enable_target">
+        Add Row</button>
+      <button id="remove_axis_tick_mark_styles_row_button" class="axis_tick_mark_styles_enable_target">
+        Remove Last Row</button>
+    </p>
+    
+    <p id="legend_area">
+      <b>Legend Text (chdl)</b>
+      <button id="legend_enable_button">Enable</button>
+      <br/>
+      <table id="legend_area_table"></table>
+      <button id="add_legend_button" class="legend_enable_target">Add legend</button>
+      <button id="remove_legend_button" class="legend_enable_target">Remove last legend</button>
+    </p>
+
+    <p id="legend_position_area">
+      <b>Legend Position/Order (chdlp)</b>
+      <button id="legend_position_enable_button">Enable</button>
+      <br/>
+      Position:
+      <select id="legend_position_selector" class="legend_position_enable_target">
+        <option value="b">Bottom horizontal (b)</option>
+        <option value="bv">Bottom vertical (bv)</option>
+        <option value="t">Top horizontal (t)</option>
+        <option value="tv">Top vertical (tv)</option>
+        <option value="r" selected="selected">Right vertical (r)</option>
+        <option value="l">Left vertical (l)</option>
+        <option value="default">None: use default</option>
+      </select>
+      Order:
+      <select id="legend_order_selector" class="legend_position_enable_target">
+        <option value="l" selected="selected">Order given to chdl (l)</option>
+        <option value="r">Reverse order as given to chdl (r)</option>
+        <option value="a">Automatic ordering (a)</option>
+        <option value="custom">Custom</option>
+        <option value="default">None: use default</option>
+      </select>
+
+      <span id="legend_custom_order">
+	Custom order: 
+	<input id="legend_custom_order_input" size="12"/>
+      </span>
+    </p>
+    
+    <p id="grid_lines_area">
+      <b>Grid Lines (chg)</b>
+      <button id="grid_lines_enable_button">Enable</button>
+      <br/>
+      <table id="grid_lines_table"></table>
+    </p>
+    
+    <p id="margin_area">
+      <b>Margin (chma)</b>
+      <button id="margin_enable_button">Enable</button><br/>
+      Chart Margin<br/>
+      <table>
+        <tr>
+          <th>Left</th><th>Right</th><th>Top</th><th>Bottom</th>
+        </tr>
+        <tr>
+          <td><input id="left_margin_input" size="8"  class="margin_enable_target" value="10"/></td>
+          <td><input id="right_margin_input" size="8"  class="margin_enable_target" value="10"/></td>
+          <td><input id="top_margin_input" size="8"  class="margin_enable_target" value="10"/></td>
+          <td><input id="bottom_margin_input" size="8"  class="margin_enable_target" value="10"/></td>
+        </tr>
+      </table>
+      Legend Margin
+      <button id="legend_margin_enable_button" class="margin_enable_target">Enable Legend Margin</button><br/>
+      <table>
+        <tr>
+          <th>Width</th><th>Height</th>
+        </tr>
+        <tr>
+          <td>
+            <input id="legend_width_margin_input" size="8" value="5"
+                   class="legend_margin_enable_target" />
+          </td>
+          <td>
+            <input id="legend_height_margin_input" size="8" value="5"
+                   class="legend_margin_enable_target"/>
+          </td>
+        </tr>
+      </table>
+    </p>
+    
+    <p id="title_area">
+      <b>Title (chtt)</b>
+      <button id="title_enable_button">Enable</button><br/>
+      <input id="title_input" class="title_enable_target" size="40"></input>
+    </p>
+
+    <p id="title_style_area">
+      <b>Title Style(chts)</b>
+      <button id="title_style_enable_button">Enable</button><br/>
+      Color: 
+      <input id="title_style_color_input" class="title_style_enable_target" size="10" value="303030"></input>
+      Font Size: 
+      <input id="title_style_font_size_input" class="title_style_enable_target" size="4" value="12"></input>
+    </p>
+
+    <p id="bar_width_spacing_area">
+      <b>Bar width and spacing (chbh)</b>
+      <button id="bar_ws_enable_button">Enable</button>
+      <br/>
+      Bar width: <input id="bar_width_input" class="bar_ws_enable_target" size="6"></input>
+      Space between bars: <input id="bar_space_input" class="bar_ws_enable_target" size="6"></input>
+      Space between groups: <input id="group_space_input" class="bar_ws_enable_target" size="6"></input>
+    </p>
+
+    <p id="pie_orient_area">
+      <b>Pie Chart Orientation (chp)</b> in radians
+      <button id="pie_orient_enable_button">Enable</button><br/>
+      <input id="pie_orient_input" class="pie_orient_enable_target" size="6"></input>
+    </p>
+
+    <p id="solid_fills_area">
+      <b>Solid Fills (chf)</b>
+      <button id="solid_fills_enable_button">Enable</button>
+      <br/>
+      <table id="solid_fills_table"></table>
+      <button id="add_solid_fills_column_button" class="solid_fills_enable_target">
+        Add Fill</button>
+      <button id="remove_solid_fills_column_button" class="solid_fills_enable_target">
+        Remove Last Fill</button>
+    </p>
+
+    <p id="gradient_fills_area">
+      <b>Gradient Fills (chf)</b>
+      <button id="gradient_fills_enable_button">Enable</button>
+      <br/>
+      <table id="gradient_fills_table"></table>
+      <button id="add_gradient_fills_column_button" class="gradient_fills_enable_target">
+        Add Color Anchor</button>
+      <button id="remove_gradient_fills_column_button" class="gradient_fills_enable_target">
+        Remove Last Color Anchor</button>
+      <button id="add_gradient_fills_row_button" class="gradient_fills_enable_target">
+        Add Fill</button>
+      <button id="remove_gradient_fills_row_button" class="gradient_fills_enable_target">
+        Remove Last Fill</button>
+    </p>
+
+    <p id="striped_fills_area">
+      <b>Striped Fills (chf)</b>
+      <button id="striped_fills_enable_button">Enable</button>
+      <br/>
+      <table id="striped_fills_table"></table>
+      <button id="add_striped_fills_column_button" class="striped_fills_enable_target">
+        Add Color</button>
+      <button id="remove_striped_fills_column_button" class="striped_fills_enable_target">
+        Remove Last Color</button>
+      <button id="add_striped_fills_row_button" class="striped_fills_enable_target">
+        Add Fill</button>
+      <button id="remove_striped_fills_row_button" class="striped_fills_enable_target">
+        Remove Last Fill</button>
+    </p>
+    
+    <p id="dynamic_icon_markers_area">
+      <b>Dynamic Icon Markers (chem)</b>
+      <button id="dynamic_icon_markers_enable_button">Enable</button>
+      <br/>
+      <table id="dynamic_icon_markers_table"></table>
+      <button id="add_dynamic_icon_markers_row_button" class="dynamic_icon_markers_enable_target">Add marker</button>
+      <button id="remove_dynamic_icon_markers_row_button" class="dynamic_icon_markers_enable_target">Remove last marker</button>
+    </p>
+     
+  </body>
+</html>
