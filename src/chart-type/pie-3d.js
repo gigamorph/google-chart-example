@@ -1,3 +1,11 @@
+//= require "../defs"
+//= require "../util"
+//= require "base-pie-chart"
+
+/* FILE pie-3d.js */
+
+/* Seong-June Kim 2010 */
+
 (function () {
 
     var type = net.yy.google.chart.type;

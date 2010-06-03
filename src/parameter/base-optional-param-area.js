@@ -1,3 +1,11 @@
+//= require "../defs"
+//= require "../util"
+//= require "base-param-area"
+
+/* FILE base-optional-param-area.js */
+
+/* Seong-June Kim 2010 */
+
 (function () {
 
     var param = net.yy.google.chart.param;

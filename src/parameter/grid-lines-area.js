@@ -1,6 +1,11 @@
-/*
- * 11/27/2009 Seong-June Kim
- */
+//= require "../defs"
+//= require "../util"
+//= require "../table"
+//= require "base-optional-param-area"
+
+/* FILE grid-lines-area.js */
+
+/* Seong-June Kim 2010 */
 
 (function () {
 

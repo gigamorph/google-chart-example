@@ -1,3 +1,11 @@
+//= require "../defs"
+//= require "../util"
+//= require "base-chart"
+
+/* FILE base-bar-chart.js */
+
+/* Seong-June Kim 2010 */
+
 (function () {
 
     var type = net.yy.google.chart.type;

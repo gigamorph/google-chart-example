@@ -1,6 +1,10 @@
-/*
- * 11/27/2009 Seong-June Kim
- */
+//= require "../defs"
+//= require "../util"
+//= require "base-optional-param-area"
+
+/* FILE margin-area.js */
+
+/* Seong-June Kim 2010 */
 
 (function () {
 

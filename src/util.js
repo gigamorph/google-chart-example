@@ -1,3 +1,9 @@
+//= require "defs"
+
+/* FILE util.js */
+
+/* Seong-June Kim 2010 */
+
 (function () {
 
     var util = net.yy.google.chart.util;

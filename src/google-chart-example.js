@@ -1,6 +1,49 @@
 /*
- * 11/27/2009 Seong-June Kim
+ * Seong-June Kim 2010
  */
+
+//= require <jquery/jquery-1.3.2>
+//= require "defs.js"
+//= require "util.js"
+//= require "chart-type/h-grouped-bars.js"
+//= require "chart-type/h-stacked-bars.js"
+//= require "chart-type/line-chart.js"
+//= require "chart-type/pie-3d.js"
+//= require "chart-type/pie-chart.js"
+//= require "chart-type/pie-concentric.js"
+//= require "chart-type/scatter-plot.js"
+//= require "chart-type/spark-lines.js"
+//= require "chart-type/v-grouped-bars.js"
+//= require "chart-type/v-stacked-bars.js"
+//= require "chart-type/xy-lines.js"
+//= require "parameter/axis-label-area.js"
+//= require "parameter/axis-label-styles-area.js"
+//= require "parameter/axis-range-area.js"
+//= require "parameter/axis-tick-mark-styles-area.js"
+//= require "parameter/background-fills-area.js"
+//= require "parameter/bar-width-spacing-area.js"
+//= require "parameter/color-area.js"
+//= require "parameter/data-area.js"
+//= require "parameter/data-scale-area.js"
+//= require "parameter/dynamic-icon-markers-area.js"
+//= require "parameter/gradient-fills-area.js"
+//= require "parameter/grid-lines-area.js"
+//= require "parameter/legend-area.js"
+//= require "parameter/legend-position-area.js"
+//= require "parameter/line-style-area.js"
+//= require "parameter/margin-area.js"
+//= require "parameter/pie-orientation-area.js"
+//= require "parameter/size-area.js"
+//= require "parameter/solid-fills-area.js"
+//= require "parameter/striped-fills-area.js"
+//= require "parameter/title-area.js"
+//= require "parameter/title-style-area.js"
+//= require "parameter/type-area.js"
+//= require "parameter/visible-axes-area.js"
+
+/* FILE google-chart-example.js */
+
+/* Seong-June Kim 2010 */
 
 (function () {
 
@@ -129,7 +172,7 @@
         updateChart: function (validate) {
             var url = 'http://chart.apis.google.com/chart?';
             for (var name in this.params) {
-                debug('name=' + name + ' obj=' + this.params[name] + ' visible=' + this.params[name].isVisible() + ' enabled=' + this.params[name].isEnabled());
+                console.log('name=' + name + ' obj=' + this.params[name] + ' visible=' + this.params[name].isVisible() + ' enabled=' + this.params[name].isEnabled());
                 if (this.params[name].isVisible() && this.params[name].isEnabled()) {
                     var pstr =  this.params[name].getParamString();
                     if (pstr) {

@@ -1,3 +1,11 @@
+//= require "../defs"
+//= require "../util"
+//= require "base-line-chart"
+
+/* FILE xy-lines.js */
+
+/* Seong-June Kim 2010 */
+
 (function () {
 
     var type = net.yy.google.chart.type;

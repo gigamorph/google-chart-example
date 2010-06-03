@@ -1,3 +1,11 @@
+//= require "../defs"
+//= require "../util"
+//= require "base-bar-chart"
+
+/* FILE v-stacked-bars.js */
+
+/* Seong-June Kim 2010 */
+
 (function () {
 
     var type = net.yy.google.chart.type;
