@@ -3,6 +3,13 @@ require 'fileutils'
 require 'rubygems'
 require 'sprockets'
 
+@deploy_server = 'you@server.address'
+@deploy_dir = '/your/deployment/location'
+@ssh_user = 'your_login'
+@ssh_group = 'your_group'
+@user = 'www-data'
+@group = 'www-data'
+
 desc "Default: combine:all" 
 task :default => [:"build"]
 
@@ -27,6 +34,17 @@ task :build => :init do
   move_index_html
 end
 
+desc "Deploy to server"
+task :deploy => :build do
+  ssh_sudo  "mkdir -p #{@deploy_dir}"
+  ssh_sudo "rm -f #{@deploy_dir}/*"
+  ssh_sudo  "chown #{@ssh_user}.#{@ssh_group} #{@deploy_dir}"
+  system "scp build/* #{@deploy_server}:#{@deploy_dir}/"
+  ssh_sudo  "chown -R #{@user}.#{@group} #{@deploy_dir}"
+  system "stty -echo; ssh #{@deploy_server} sudo apache2ctl graceful; stty echo"
+end
+
+
 def sprocket(source_files, target)
   secretary = Sprockets::Secretary.new(
     :source_files => source_files,
@@ -44,4 +62,8 @@ def move_index_html
       ofile.write(ifile.read.sub(/#{begin_js}.*#{end_js}/mi, new_js))
     end
   end
+end
+
+def ssh_sudo(command)
+  system "stty -echo; ssh #{@deploy_server} sudo #{command}; stty echo"
 end
